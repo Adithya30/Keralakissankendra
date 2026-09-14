@@ -43,7 +43,7 @@ export default async function Home() {
         <div className="container relative z-10 mx-auto grid grid-cols-1 items-center gap-12 px-6 md:grid-cols-2">
           <div>
             <h1 className="mb-6 text-5xl font-bold leading-tight text-zinc-900 md:text-7xl">
-              Nurturing <br />
+              nurturing <br />
               <span className="text-emerald-600">green</span> dreams
             </h1>
             <p className="mb-8 max-w-lg text-xl leading-relaxed text-zinc-600">

@@ -3,6 +3,7 @@ import { requireAuthProfile } from "@/lib/auth";
 import { getSupabaseClient } from "@/lib/supabase";
 import { getClientIp, isRateLimited, isTrustedOrigin, verifyRazorpaySignature } from "@/lib/security";
 import { writeAuditLog } from "@/lib/audit";
+import { sendOrderConfirmationWhatsApp } from "@/lib/whatsapp";
 
 export async function POST(request: Request) {
   if (!isTrustedOrigin(request)) {
@@ -201,6 +202,19 @@ export async function POST(request: Request) {
 
     // Update order status
     await supabase.from('orders').update({ status: 'PAID' }).eq('id', order.id);
+
+    // Send WhatsApp order confirmation
+    await sendOrderConfirmationWhatsApp({
+      recipientPhone: order.recipient_phone,
+      recipientName: order.recipient_name,
+      orderId: order.id,
+      items: items.map((i) => ({
+        name: i.variation_label || 'Plant',
+        quantity: i.quantity,
+        priceInr: i.unit_price_inr * i.quantity,
+      })),
+      totalInr: order.total_inr,
+    });
 
     // Clear cart
     await supabase.from('cart_items').delete().eq('profile_id', profile.id);

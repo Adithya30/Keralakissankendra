@@ -6,6 +6,7 @@ import { writeAuditLog } from "@/lib/audit";
 import { updateOrderWithDetails, getOrderWithDetails } from "@/lib/database";
 import { normalizeAdminOrder } from "@/lib/orders";
 import { cleanHttpUrl, cleanText, getClientIp, isRateLimited, isTrustedOrigin } from "@/lib/security";
+import { sendShippingUpdateWhatsApp } from "@/lib/whatsapp";
 
 export async function PATCH(
   request: Request,
@@ -113,6 +114,17 @@ export async function PATCH(
   }
 
   const order = await updateOrderWithDetails(id, data);
+
+  // Send shipping update WhatsApp if tracking ID changed
+  if (shippingTrackingId && shippingTrackingId !== existingOrder.shipping_tracking_id) {
+    await sendShippingUpdateWhatsApp({
+      recipientPhone: existingOrder.recipient_phone,
+      recipientName: existingOrder.recipient_name,
+      orderId: existingOrder.id,
+      shippingProvider: shippingProvider || "Partner",
+      shippingTrackingId,
+    });
+  }
 
   await writeAuditLog({
     action: AuditAction.ADMIN_ORDER_UPDATE,

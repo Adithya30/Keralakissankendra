@@ -5,8 +5,8 @@ import "./globals.css";
 import Footer from "./components/Footer";
 
 export const metadata: Metadata = {
-  title: "LeafCart",
-  description: "Secure e-commerce with Clerk + Prisma + Razorpay",
+  title: "Kerala Kissan Kendra",
+  description: "Nurturing green dreams",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
