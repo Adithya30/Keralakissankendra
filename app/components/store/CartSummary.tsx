@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default function CartSummary({ subtotalInr }: Props) {
-  const shipping = subtotalInr > 0 ? 49 : 0;
+  const shipping = subtotalInr >= 1000 ? 0 : subtotalInr > 0 ? 50 : 0;
   const total = subtotalInr + shipping;
 
   return (

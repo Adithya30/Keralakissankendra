@@ -5,7 +5,7 @@ import { getSupabaseClient } from "@/lib/supabase";
 import { cleanText, getClientIp, isRateLimited, isTrustedOrigin } from "@/lib/security";
 import { writeAuditLog } from "@/lib/audit";
 
-const SHIPPING_INR = 49;
+const SHIPPING_INR = 50;
 
 type CheckoutPayload = {
   recipientName?: string;
@@ -157,7 +157,8 @@ export async function POST(request: Request) {
   }
 
   const subtotalInr = cart.reduce((sum: number, row: any) => sum + row.quantity * row.product_variations.price_inr, 0);
-  const totalInr = subtotalInr + SHIPPING_INR;
+  const shippingInr = subtotalInr >= 1000 ? 0 : SHIPPING_INR;
+  const totalInr = subtotalInr + shippingInr;
 
   // Create order
   const { data: order, error: orderError } = await supabase
@@ -165,7 +166,7 @@ export async function POST(request: Request) {
     .insert([{
       profile_id: profile.id,
       subtotal_inr: subtotalInr,
-      shipping_inr: SHIPPING_INR,
+      shipping_inr: shippingInr,
       total_inr: totalInr,
       status: 'PENDING',
       recipient_name: validated.value.recipientName,
