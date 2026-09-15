@@ -43,7 +43,7 @@ export default function AddToCartButton({ variationId, className = "", label = "
       setAdded(true);
       window.setTimeout(() => setAdded(false), 1200);
     } catch {
-      setErrorText("Request failed");
+      router.push("/login")
     } finally {
       setLoading(false);
     }
