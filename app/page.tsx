@@ -78,7 +78,7 @@ export default async function Home() {
               {
                 icon: <Truck size={32} className="text-emerald-600" />,
                 title: "Fast Delivery",
-                desc: "Get your plants delivered to your doorstep.",
+                desc: "Get your plants delivered.",
               },
               {
                 icon: <ShieldCheck size={32} className="text-emerald-600" />,
