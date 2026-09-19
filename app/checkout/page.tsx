@@ -97,7 +97,7 @@ export default function CheckoutPage() {
         key: createData.razorpayKeyId,
         amount: createData.amountPaise,
         currency: createData.currency,
-        name: "LeafCart",
+        name: "Kerala Kissan Kendra",
         description: "Plant order payment",
         order_id: createData.razorpayOrderId,
         prefill: createData.prefill,
